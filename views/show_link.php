@@ -9,9 +9,7 @@
     <h1>Forgot Password</h1>
     <h2>by David Connelly</h2>
         <div class="container">
-        <p>Building systems for dealing with forgotten passwords takes ages.</p>
-        <p>This module makes the process fast and easy.</p>
-
+        <p>Here's a module for assisting users who have forgotten their passwords.</p>
         <p>Based on your current settings, the password recovery URL is:</p>
 
         <p><?= anchor($link, $link) ?></p>
