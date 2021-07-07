@@ -18,8 +18,8 @@
         $link = str_replace(BASE_URL, '', $link);
         ?>
         <pre><div id="copy"><img src="<?= BASE_URL ?>forgot_password_module/copy.png" onclick="copyCode()"></div>
-<div id="php-code"><code>$target_url = BASE_URL.'<?= $link ?>';
-echo anchor('<?= $link ?>', 'Forgot your password?');</code></div></pre>
+<div id="php-code">$target_url = BASE_URL.'<?= $link ?>';
+echo anchor('<?= $link ?>', 'Forgot your password?');</div></pre>
 
 <p style="text-align: left;">INSTRUCTIONS: Open 'Forgot_password.php' (the controller file) and edit the settings at the top of the 'index()' method to suit your needs.</p>
 
