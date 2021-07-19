@@ -21,6 +21,7 @@ class Forgot_password extends Trongate {
                 }
                 $link.= '~';
                 $data['link'] = str_replace('-~', '', $link);
+                $data['link'] = $this->_encrypt_link($data['link']);
                 $this->view('show_link', $data);
             } else {
                 redirect(BASE_URL);
@@ -35,6 +36,24 @@ class Forgot_password extends Trongate {
         //***************************************** 
         // *** ADD YOUR EMAIL SENDING CODE HERE ***
         //*****************************************
+    }
+
+    function _encrypt_link($link) {
+        $ditch = BASE_URL.'forgot_password/help/';
+        $str = str_replace($ditch, '', $link);
+        $this->module('forgot_password-encryption');
+        $enc = $this->encryption->_encrypt($str);
+        $enc_link = $ditch.$enc;
+        return $enc_link;
+    }
+
+    function _decrypt_link($this_url) {
+        $ditch = BASE_URL.segment(1).'/'.segment(2).'/';
+        $str = str_replace($ditch, '', $this_url);
+        $this->module('forgot_password-encryption');
+        $decrypted = $this->encryption->_decrypt($str);
+        $decrypted_link = $ditch.$decrypted;
+        return $decrypted_link;
     }
 
     function _in_you_go($trongate_user_id) {
@@ -73,9 +92,10 @@ class Forgot_password extends Trongate {
     }
 
     function help() {
-        $template = $this->_get_template();
-        $fields = $this->_get_fields();
-        $table = $this->_get_table();
+        $assumed_url = $this->_decrypt_link(current_url());
+        $template = $this->_get_template($assumed_url);
+        $fields = $this->_get_fields($assumed_url);
+        $table = $this->_get_table($assumed_url);
         $this->_make_sure_valid_url($table, $fields);
         $data['fields'] = $fields;
         $data['form_intro'] = $this->_build_form_intro($fields);
@@ -86,7 +106,8 @@ class Forgot_password extends Trongate {
 
     function check_your_email() {
         $data['view_file'] = 'check_your_email';
-        $template = $this->_get_template();
+        $assumed_url = $this->_decrypt_link(current_url());
+        $template = $this->_get_template($assumed_url);
         $this->template($template, $data);
     }
 
@@ -99,8 +120,9 @@ class Forgot_password extends Trongate {
 
     function submit_details() {
         $submit = post('submit');
-        $fields = $this->_get_fields();
-        $table = $this->_get_table();
+        $assumed_url = $this->_decrypt_link(current_url());
+        $fields = $this->_get_fields($assumed_url);
+        $table = $this->_get_table($assumed_url);
         $this->_make_sure_valid_url($table, $fields);
 
         if ($submit == 'Submit') {
@@ -222,18 +244,24 @@ class Forgot_password extends Trongate {
         return $info;
     }
 
-    function _get_table() {
-        $table = segment(3);
+    function _get_table($assumed_url) {
+        $str = str_replace(BASE_URL, '', $assumed_url);
+        $bits =  explode('/', $str);
+        $table = $bits[2];
         return $table;
     }
 
-    function _get_template() {
-        $template = segment(4);
+    function _get_template($assumed_url) {
+        $str = str_replace(BASE_URL, '', $assumed_url);
+        $bits =  explode('/', $str);
+        $template = $bits[3];
         return $template;
     }
 
-    function _get_fields() {
-        $fields_str = segment(5);
+    function _get_fields($assumed_url) {
+        $str = str_replace(BASE_URL, '', $assumed_url);
+        $bits =  explode('/', $str);
+        $fields_str = $bits[4];
         $fields = explode('-', $fields_str);
         return $fields;
     }

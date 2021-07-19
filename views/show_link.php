@@ -10,16 +10,22 @@
     <h2>by David Connelly</h2>
         <div class="container">
         <p>Here's a module for assisting users who have forgotten their passwords.</p>
+
         <p>Based on your current settings, the password recovery URL is:</p>
 
-        <p><?= anchor($link, $link) ?></p>
+        <p><?= anchor($link, 'HERE (CLICK TO VIEW)') ?></p>
         <p style="margin-top: 2em;">Here's some PHP code that might be useful:</p>
         <?php
         $link = str_replace(BASE_URL, '', $link);
         ?>
         <pre><div id="copy"><img src="<?= BASE_URL ?>forgot_password_module/copy.png" onclick="copyCode()"></div>
-<div id="php-code">$target_url = BASE_URL.'<?= $link ?>';
-echo anchor('<?= $link ?>', 'Forgot your password?');</div></pre>
+<?php
+$ditch = 'forgot_password/help/';
+$enc_code = str_replace($ditch, '', $link);
+?>
+<div id="php-code">$password_recovery_url = BASE_URL.'forgot_password/help/';
+$password_recovery_url.= '<?= $enc_code ?>';
+echo anchor($password_recovery_url, 'Forgot your password?');</div></pre>
 
 <p style="text-align: left;">INSTRUCTIONS: Open 'Forgot_password.php' (the controller file) and edit the settings at the top of the 'index()' method to suit your needs.</p>
 
@@ -57,26 +63,33 @@ echo anchor('<?= $link ?>', 'Forgot your password?');</div></pre>
             background-color: #333;
             color: #eee;
             padding: 16px;
-            font-size: 17px;
             text-align: left;
             line-height: 2em;
             margin: 0 auto;
+            overflow: auto;
         }
 
         #copy {
-            float: right;
             position: relative;
+            padding: 0;
+            margin: 0;
+            height: 24.5px;
+            text-align: right;
+            font-size: 17px;
         }
 
         #copy img {
+            width: 24.5px;
             height: 30px;
             width: auto;
             cursor: pointer;
         }
 
         #php-code {
-            top: -15px;
+            top: -3em;
             position: relative;
+            font-size: 13px;
+            line-height: 2em;
         }
     </style>
 
