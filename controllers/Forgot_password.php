@@ -38,6 +38,12 @@ class Forgot_password extends Trongate {
         //*****************************************
     }
 
+    function make_key() {
+        if (ENV == 'dev') {
+            echo base64_encode(openssl_random_pseudo_bytes(64));
+        }
+    }
+
     function _encrypt_link($link) {
         $ditch = BASE_URL.'forgot_password/help/';
         $str = str_replace($ditch, '', $link);

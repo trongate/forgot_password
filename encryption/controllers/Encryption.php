@@ -1,20 +1,9 @@
 <?php
 class Encryption extends Trongate {
 
-	/*
-		IMPORTANT:  Be sure to generate your own key using make_key() before using this!
-		Thanks and gratitude goes to Derek McLean @delboy1978uk for helping out with this
-	*/
-
     private $cipher = "aes-128-gcm";
     private $options = 0;
     private $key = 'AfHE6Ccn6wyvGpQACy61QOQ719tl/zXuZTg+thhvAgGiJr88vY6Baz6BzJKu5p8wAEty0+G4bAKwC0MDMdchiw==';
-
-    function make_key() {
-    	if (ENV == 'dev') {
-    		echo base64_encode(openssl_random_pseudo_bytes(64));
-    	}
-    }
 
     function _encrypt($plaintext) {
         $ivlen = \openssl_cipher_iv_length($this->cipher);
